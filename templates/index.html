@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiwari's World</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+      color: #00ffcc;
+      cursor: none; /* Hide default cursor for effect */
+    }
+
+    /* Neon Cursor Trail */
+    #cursor-trail {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
+    .trail-dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(0, 255, 204, 0.8);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 30px rgba(0, 255, 204, 0.6);
+      animation: fadeOut 0.8s linear forwards;
+    }
+
+    @keyframes fadeOut {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+    }
+
+    /* Cyberpunk Background Animation */
+    .cyberpunk-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      z-index: -1;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: glitch 5s infinite linear;
+    }
+
+    .cyberpunk-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: glitch 5s infinite linear;
+      color: #00ffcc;
+      white-space: nowrap;
+    }
+
+    @keyframes glitch {
+      0% { transform: translateX(0); }
+      10% { transform: translateX(-5px); }
+      20% { transform: translateX(5px); }
+      30% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      50% { transform: translateX(0); }
+      100% { transform: translateX(0); }
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff;
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 30px;
+      z-index: 2;
+      position: relative;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      width: 350px;
+      font-size: 1em;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      background: #00ffcc;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ffcc;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00ffff;
+      box-shadow: 0 0 25px #00ffff;
+    }
+
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      color: #00ffcc;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    #popup .content {
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      padding: 30px;
+      border-radius: 16px;
+      border: 2px solid #00ffcc;
+      box-shadow: 0 0 20px #00ffcc, 0 0 10px #00ffcc inset;
+      width: 400px;
+      text-align: center;
+      animation: pulseShadow 2s infinite;
+    }
+
+    @keyframes pulseShadow {
+      0% { box-shadow: 0 0 10px #00ffcc, 0 0 5px #00ffcc inset; }
+      50% { box-shadow: 0 0 20px #00ffcc, 0 0 15px #00ffcc inset; }
+      100% { box-shadow: 0 0 10px #00ffcc, 0 0 5px #00ffcc inset; }
+    }
+
+    .progress-bar {
+      width: 100%;
+      background-color: #111;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 15px 0;
+      box-shadow: 0 0 8px #00ffcc;
+    }
+
+    .progress-bar-inner {
+      height: 20px;
+      width: 0;
+      background-color: #00ffcc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffcc;
+      transition: width 0.3s ease;
+    }
+
+    #popup h2, #popup p {
+      text-shadow: 0 0 8px #00ffff;
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- Neon Cursor Trail Container -->
+  <div id="cursor-trail"></div>
+
+  <!-- Cyberpunk Background -->
+  <div class="cyberpunk-bg">
+    <div class="cyberpunk-text">
+      <pre>
+        // Random cyberpunk code is flowing
+        const code = 'Welcome to Cyberpunk World...';
+        let counter = 0;
+        while (counter < 1000) {
+          console.log(code + ' - ' + counter);
+          counter++;
+        }
+      </pre>
+    </div>
+  </div>
+
+  <h1>Welcome to Tiwari's World</h1>
+
+  <div class="container">
+    <input type="text" id="videoLink" placeholder="Enter video URL">
+    <button onclick="startDownload()" id="downloadBtn">Download Video</button>
+  </div>
+
+  <div id="popup">
+    <div class="content">
+      <h2>Downloading...</h2>
+      <div class="progress-bar"><div id="progress" class="progress-bar-inner"></div></div>
+      <p id="status">Waiting for response...</p>
+      <p id="eta"></p>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Glowing Cursor Trail
+    document.addEventListener('mousemove', function(e) {
+      const trail = document.getElementById('cursor-trail');
+      const dot = document.createElement('div');
+      dot.className = 'trail-dot';
+      dot.style.left = `${e.clientX}px`;
+      dot.style.top = `${e.clientY}px`;
+      trail.appendChild(dot);
+      setTimeout(() => {
+        trail.removeChild(dot);
+      }, 800);
+    });
+
+    async function startDownload() {
+      const urlInput = document.getElementById("videoLink");
+      const url = urlInput.value;
+      if (!url) return alert("Please enter a URL");
+
+      document.getElementById("popup").style.display = "flex";
+      document.getElementById("progress").style.width = "0%";
+      document.getElementById("status").innerText = "Starting download...";
+      document.getElementById("eta").innerText = "";
+      document.getElementById("downloadBtn").disabled = true;
+
+      await fetch("/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+
+      trackProgress(urlInput);
+    }
+
+    async function trackProgress(urlInput) {
+      const progressBar = document.getElementById("progress");
+      const statusText = document.getElementById("status");
+      const etaText = document.getElementById("eta");
+
+      const interval = setInterval(async () => {
+        const res = await fetch("/status");
+        const status = await res.json();
+        const percent = status.percent || 0;
+        const speed = status.speed ? (status.speed / 1024).toFixed(2) + " KB/s" : "Calculating...";
+        const eta = status.eta ? status.eta + "s" : "Calculating...";
+
+        progressBar.style.width = `${percent}%`;
+        statusText.innerText = `Downloading: ${percent.toFixed(2)}% at ${speed}`;
+        etaText.innerText = `ETA: ${eta}`;
+
+        if (status.complete) {
+          clearInterval(interval);
+          statusText.innerText = "✅ Download Complete!";
+          etaText.innerText = "";
+          progressBar.style.backgroundColor = "#00ff00";
+          urlInput.value = "";
+          setTimeout(() => {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("downloadBtn").disabled = false;
+          }, 3000);
+        }
+      }, 1000);
+    }
+  </script>
+
+</body>
+</html>
