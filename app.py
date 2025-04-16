@@ -1,10 +1,12 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_file
 from yt_dlp import YoutubeDL
 import threading
 import os
+import glob
 
 app = Flask(__name__)
 progress_data = {}
+downloaded_file_path = None
 
 @app.route("/")
 def index():
@@ -47,6 +49,7 @@ def download():
             })
 
     def download_video():
+        global downloaded_file_path
         try:
             ydl_opts = {
                 'format': 'best',
@@ -55,7 +58,9 @@ def download():
                 'quiet': True
             }
             with YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
+                info = ydl.extract_info(url, download=True)
+                filename = ydl.prepare_filename(info)
+                downloaded_file_path = filename
         except Exception as e:
             progress_data.update({
                 "status": "error",
@@ -69,6 +74,17 @@ def download():
 @app.route("/status")
 def status():
     return jsonify(progress_data)
+
+@app.route("/get_video")
+def get_video():
+    global downloaded_file_path
+    try:
+        if downloaded_file_path and os.path.exists(downloaded_file_path):
+            return send_file(downloaded_file_path, as_attachment=True)
+        else:
+            return "File not found", 404
+    except Exception as e:
+        return f"Error: {str(e)}", 500
 
 if __name__ == "__main__":
     os.makedirs("downloads", exist_ok=True)

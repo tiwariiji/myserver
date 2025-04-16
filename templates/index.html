@@ -14,10 +14,9 @@
       overflow: hidden;
       background: black;
       color: #00ffcc;
-      cursor: none; /* Hide default cursor for effect */
+      cursor: none;
     }
 
-    /* Neon Cursor Trail */
     #cursor-trail {
       position: fixed;
       top: 0;
@@ -37,17 +36,10 @@
     }
 
     @keyframes fadeOut {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(0.3);
-        opacity: 0;
-      }
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.3); opacity: 0; }
     }
 
-    /* Cyberpunk Background Animation */
     .cyberpunk-bg {
       position: absolute;
       top: 0;
@@ -76,13 +68,9 @@
     }
 
     @keyframes glitch {
-      0% { transform: translateX(0); }
-      10% { transform: translateX(-5px); }
-      20% { transform: translateX(5px); }
-      30% { transform: translateX(-5px); }
-      40% { transform: translateX(5px); }
-      50% { transform: translateX(0); }
-      100% { transform: translateX(0); }
+      0%, 50%, 100% { transform: translateX(0); }
+      10%, 30% { transform: translateX(-5px); }
+      20%, 40% { transform: translateX(5px); }
     }
 
     h1 {
@@ -179,15 +167,42 @@
     #popup h2, #popup p {
       text-shadow: 0 0 8px #00ffff;
     }
+
+    .success-animation {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeSuccess 1s ease-in-out forwards;
+    }
+
+    .checkmark {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: block;
+      stroke-width: 3;
+      stroke: #00ffcc;
+      stroke-miterlimit: 10;
+      margin: 20px auto;
+      box-shadow: 0 0 20px #00ffcc;
+      animation: scaleSuccess 0.5s ease-in-out forwards;
+    }
+
+    @keyframes fadeSuccess {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes scaleSuccess {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
 
-
-  <!-- Neon Cursor Trail Container -->
   <div id="cursor-trail"></div>
 
-  <!-- Cyberpunk Background -->
   <div class="cyberpunk-bg">
     <div class="cyberpunk-text">
       <pre>
@@ -215,12 +230,17 @@
       <div class="progress-bar"><div id="progress" class="progress-bar-inner"></div></div>
       <p id="status">Waiting for response...</p>
       <p id="eta"></p>
+      <div class="success-animation" id="successAnim">
+        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+          <circle cx="26" cy="26" r="25" fill="none"/>
+          <path fill="none" stroke="#00ffcc" stroke-width="4" d="M14 27l7 7 16-16"/>
+        </svg>
+        <p>Download Complete!</p>
+      </div>
     </div>
   </div>
 
-  <!-- JavaScript Logic -->
   <script>
-    // Glowing Cursor Trail
     document.addEventListener('mousemove', function(e) {
       const trail = document.getElementById('cursor-trail');
       const dot = document.createElement('div');
@@ -228,9 +248,7 @@
       dot.style.left = `${e.clientX}px`;
       dot.style.top = `${e.clientY}px`;
       trail.appendChild(dot);
-      setTimeout(() => {
-        trail.removeChild(dot);
-      }, 800);
+      setTimeout(() => { trail.removeChild(dot); }, 800);
     });
 
     async function startDownload() {
@@ -243,6 +261,7 @@
       document.getElementById("status").innerText = "Starting download...";
       document.getElementById("eta").innerText = "";
       document.getElementById("downloadBtn").disabled = true;
+      document.getElementById("successAnim").style.display = "none";
 
       await fetch("/download", {
         method: "POST",
@@ -257,6 +276,7 @@
       const progressBar = document.getElementById("progress");
       const statusText = document.getElementById("status");
       const etaText = document.getElementById("eta");
+      const successAnim = document.getElementById("successAnim");
 
       const interval = setInterval(async () => {
         const res = await fetch("/status");
@@ -271,10 +291,11 @@
 
         if (status.complete) {
           clearInterval(interval);
-          statusText.innerText = "✅ Download Complete!";
-          etaText.innerText = "";
           progressBar.style.backgroundColor = "#00ff00";
           urlInput.value = "";
+          successAnim.style.display = "flex";
+          statusText.innerText = "";
+          etaText.innerText = "";
           setTimeout(() => {
             document.getElementById("popup").style.display = "none";
             document.getElementById("downloadBtn").disabled = false;
